@@ -18,6 +18,7 @@ const DATE_FORMAT = "yyyy-MM-dd";
 const COMMON_DAY_COLOR = "#DDEBF9";
 const START_DAY_COLOR = "#058CF9";
 const END_DAY_COLOR = "#058CF9";
+
 const startDayProperties: DateOptions = {
   startingDay: true,
   color: START_DAY_COLOR,
@@ -51,6 +52,7 @@ const parseDateToDateOptionsObject = ({
   else parsedObject = { [formattedDate]: commonDayProperties };
   return parsedObject;
 };
+
 export const markedDates = ({
   startDate,
   endDate,

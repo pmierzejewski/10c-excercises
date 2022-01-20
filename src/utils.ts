@@ -42,7 +42,7 @@ export const markedDates1 = ({
       end: endDate,
     });
     dates = datesArray.reduce(
-      (dateObj: MarkedDates, date: Date, index, array): MarkedDates => ({
+      (dateObj: MarkedDates, date: Date, i, ar): MarkedDates => ({
         ...dateObj,
         [format(date, "yyyy-MM-dd")]: {
           color: "#DDEBF9",
@@ -97,6 +97,25 @@ export const markedDates2 = ({
         dates[item.date] = newItem;
       });
     return dates;
+  }
+  return dates;
+};
+
+export const getDates1 = ({ startDate, endDate }: MarkedDatesVars): Date[] => {
+  return eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  });
+};
+
+export const getDates2 = ({ startDate, endDate }: MarkedDatesVars): Date[] => {
+  let dates: Date[] = [];
+  for (
+    let currDate = new Date(startDate);
+    currDate <= endDate;
+    currDate.setDate(currDate.getDate() + 1)
+  ) {
+    dates.push(currDate);
   }
   return dates;
 };

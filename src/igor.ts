@@ -34,6 +34,7 @@ export const markedDates = ({
     const objEntries = dates.map((date, i) => [
       format(date, "yyyy-MM-dd"),
       generateDateValues(i, dates.length),
+    ]);
     const returnedObject = Object.fromEntries(objEntries);
     return returnedObject;
   }
