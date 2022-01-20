@@ -19,9 +19,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@types/benchmark": "^2.1.1",
     "@types/jest": "^27.4.0",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
+    "benchmark": "^2.1.4",
     "jest": "^27.4.7",
     "jest-expo": "^44.0.1",
     "react-test-renderer": "17",

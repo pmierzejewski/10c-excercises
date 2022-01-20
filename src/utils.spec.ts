@@ -1,4 +1,8 @@
-import { MarkedDates, markedDates } from "./utils";
+import Benchmark, { Event } from "benchmark";
+import { MarkedDates, markedDates1, markedDates2 } from "./utils";
+import { markedDates as markedDatesIgor } from "./igor";
+import { markedDates as markedDatesMateusz } from "./mateusz";
+import { markedDates as markedDatesMichal } from "./michal";
 
 describe("markedDates", () => {
   it("should return parsed object given both dates", () => {
@@ -31,9 +35,18 @@ describe("markedDates", () => {
       },
     };
     // Act
-    const result = markedDates({ startDate, endDate });
+    const result1 = markedDates1({ startDate, endDate });
+    const result2 = markedDates2({ startDate, endDate });
+    const resultIgor = markedDatesIgor({ startDate, endDate });
+    const resultMateusz = markedDatesMateusz({ startDate, endDate });
+    const resultMichal = markedDatesMichal({ startDate, endDate });
+
     // Assert
-    expect(result).toEqual(expectedResult);
+    expect(result1).toEqual(expectedResult);
+    expect(result2).toEqual(expectedResult);
+    expect(resultIgor).toEqual(expectedResult);
+    expect(resultMateusz).toEqual(expectedResult);
+    expect(resultMichal).toEqual(expectedResult);
   });
 
   it("should return single date given only start date", () => {
@@ -47,9 +60,11 @@ describe("markedDates", () => {
       },
     };
     // Act
-    const result = markedDates({ startDate });
+    const result = markedDatesIgor({ startDate });
+    const resultMateusz = markedDatesMateusz({ startDate });
     // Assert
     expect(result).toEqual(expectedResult);
+    expect(resultMateusz).toEqual(expectedResult);
   });
 
   it("should return single date given only end date", () => {
@@ -63,15 +78,54 @@ describe("markedDates", () => {
       },
     };
     // Act
-    const result = markedDates({ endDate });
+    const result = markedDatesIgor({ endDate });
+    const resultMateusz = markedDatesMateusz({ endDate });
     // Assert
     expect(result).toEqual(expectedResult);
+    expect(resultMateusz).toEqual(expectedResult);
   });
 
   it("should throw an error if dates are undefined", () => {
     // Act
-    const resultFunction = () => markedDates({});
+    const resultFunction = () => markedDatesIgor({});
+    const resultFunctionMateusz = () => markedDatesMateusz({});
     // Assert
     expect(resultFunction).toThrowError();
+    expect(resultFunctionMateusz).toThrowError();
+  });
+});
+
+describe("markedDatesPerformance", () => {
+  it("test the speed", () => {
+    const startDate = new Date("2022-01-01");
+    const endDate = new Date("2022-01-07");
+    var suite = new Benchmark.Suite();
+    suite
+      .add("igor", () => {
+        markedDatesIgor({ startDate, endDate });
+      })
+      .add("mateusz", () => {
+        markedDatesMateusz({ startDate, endDate });
+      })
+      .add("michal", () => {
+        markedDatesMichal({ startDate, endDate });
+      })
+      .add("jarek", () => {
+        markedDates1({ startDate, endDate });
+      })
+      .add("jarek+patryk refactor", () => {
+        markedDates2({ startDate, endDate });
+      })
+      .on("cycle", function (event: Event) {
+        const meanInSecs = event.target.stats?.mean;
+        const mean = meanInSecs
+          ? `${(meanInSecs * 1000).toFixed(4)}ms`
+          : "no stats available";
+        console.log(String(event.target), mean);
+      })
+      .on("complete", function () {
+        console.log("Fastest is " + suite.filter("fastest").map("name"));
+      })
+      .run();
   });
 });
